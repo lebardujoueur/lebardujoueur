@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Le Bar du Joueur — Bar à jeux et TCG à Aniche</title>
+  <meta name="description" content="Bar à jeux de société, cartes (TCG) et bières pression — bientôt ouvert au 29 rue Henri Barbusse à Aniche.">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    /* Vérification d'âge (loi Évin) déjà validée lors d'une visite précédente. */
+    try {
+      if (localStorage.getItem('bar_du_joueur_age_ok') === '1') {
+        document.documentElement.setAttribute('data-age-ok', '1');
+      }
+    } catch (e) {}
+    /* Intro de ~8 s : une fois par session (ajouter ?intro à l'adresse pour la revoir),
+       jamais si l'utilisateur a désactivé les animations. */
+    try {
+      if (/[?&]intro\b/.test(location.search)) sessionStorage.removeItem('bar_du_joueur_intro');
+      if (sessionStorage.getItem('bar_du_joueur_intro') === '1' || matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.setAttribute('data-intro-done', '1');
+      }
+    } catch (e) { document.documentElement.setAttribute('data-intro-done', '1'); }
+  </script>
+</head>
+<body>
+
+  <!-- Vérification d'âge (loi Évin — obligatoire : le site promeut une licence de boissons alcoolisées) -->
+  <div class="age-gate" id="ageGate" role="dialog" aria-modal="true" aria-label="Vérification d'âge">
+    <div class="age-gate-box">
+      <!-- logo officiel complet (écriture + dé superposés) -->
+      <div class="age-gate-logo" role="img" aria-label="Le Bar du Joueur">
+        <img src="images/logo-text.png" alt="">
+        <img src="images/logo-die.png" alt="">
+      </div>
+      <p class="age-gate-text">Cet établissement est titulaire d'une licence de boissons alcoolisées.</p>
+      <p class="age-gate-question">Avez-vous 18 ans ou plus ?</p>
+      <div class="age-gate-actions">
+        <button class="age-gate-btn age-gate-yes" id="ageGateYes" type="button">Oui, j'ai 18 ans ou plus</button>
+        <button class="age-gate-btn age-gate-no" id="ageGateNo" type="button">Non</button>
+      </div>
+      <p class="age-gate-warning mono">L'ABUS D'ALCOOL EST DANGEREUX POUR LA SANTÉ, À CONSOMMER AVEC MODÉRATION.</p>
+    </div>
+  </div>
+  <script src="age-gate.js"></script>
+
+  <!-- Intro de marque (~8 s) : démarre après la vérification d'âge -->
+  <div class="intro" id="intro" aria-hidden="true">
+    <div class="intro-center">
+      <!-- le vrai logo en deux calques de même taille : l'écriture, puis le dé qui vient s'y loger -->
+      <div class="intro-logo">
+        <img class="logo-text" src="images/logo-text.png" alt="">
+        <img class="logo-die" src="images/logo-die.png" alt="">
+        <span class="intro-ring"></span>
+      </div>
+      <div class="intro-load">
+        <p class="mono">CHARGEMENT DE LA PARTIE</p>
+        <span class="intro-bar"><i></i></span>
+      </div>
+    </div>
+    <button class="intro-skip mono" id="introSkip" type="button">PASSER ›</button>
+  </div>
+  <script src="intro.js"></script>
+
+  <header class="top" id="top">
+    <a class="brand" href="#accueil"><img src="images/logo-icon.png" alt=""><span id="brandName">Le Bar du Joueur</span></a>
+    <nav class="menu" aria-label="Navigation principale">
+      <a href="#tabs" data-tab="nouveautes">Nouveautés</a>
+      <a href="#tabs" data-tab="planning">Planning</a>
+      <a href="#tabs" data-tab="jeux">Jeux</a>
+      <a href="#tabs" data-tab="carte">La carte</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <a class="btn btn-primary top-cta" id="topCta" href="#contact">Nous écrire</a>
+  </header>
+
+  <main>
+    <!-- ACCUEIL : les infos clés dès l'arrivée -->
+    <section class="hero" id="accueil">
+      <div class="hero-text">
+        <p class="kicker mono" id="heroKicker"></p>
+        <h1 class="hero-logo" aria-label="Le Bar du Joueur">
+          <img src="images/logo-text.png" alt="">
+          <img src="images/logo-die.png" alt="">
+        </h1>
+        <p class="lead" id="heroLead"></p>
+        <p class="status"><i aria-hidden="true"></i><span id="statusLabel"></span></p>
+      </div>
+    </section>
+
+    <section class="stats" id="stats" aria-label="En chiffres"></section>
+
+    <!-- Onglets : Nouveautés · Planning · Jeux -->
+    <section class="block" id="tabs">
+      <header class="sec-head tabs-head"><p class="kicker mono">INFOS PRATIQUES</p><h2>Nouveautés, planning, jeux et carte</h2></header>
+      <div class="tabs-nav" role="tablist" id="tabsNav">
+        <button class="tab-btn active" role="tab" aria-selected="true" data-tab="nouveautes">Nouveautés</button>
+        <button class="tab-btn" role="tab" aria-selected="false" data-tab="planning">Planning</button>
+        <button class="tab-btn" role="tab" aria-selected="false" data-tab="jeux">Jeux</button>
+        <button class="tab-btn" role="tab" aria-selected="false" data-tab="carte">La carte</button>
+      </div>
+
+      <div class="tab-panel active" data-panel="nouveautes">
+        <div class="news" id="newsList"></div>
+      </div>
+      <div class="tab-panel" data-panel="planning">
+        <p class="note panel-note" id="planningNote"></p>
+        <div class="planning" id="planningList"></div>
+      </div>
+      <div class="tab-panel" data-panel="jeux">
+        <p class="note panel-note" id="jeuxNote"></p>
+        <div id="gamesPanel"></div>
+      </div>
+      <div class="tab-panel" data-panel="carte">
+        <p class="note panel-note" id="carteNote"></p>
+        <div class="carte-grid" id="carteGrid"></div>
+        <p class="carte-warning mono">L'ABUS D'ALCOOL EST DANGEREUX POUR LA SANTÉ, À CONSOMMER AVEC MODÉRATION.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" id="contact">
+    <div class="footer-grid">
+      <div>
+        <p class="footer-brand">Le Bar du Joueur</p>
+        <p class="footer-line" id="fAddress"></p>
+      </div>
+      <div>
+        <p class="label mono">CONTACT</p>
+        <p class="footer-line"><a id="fMail" href="#"></a></p>
+        <p class="footer-line" id="fSocials"></p>
+      </div>
+      <div>
+        <p class="label mono">INFOS</p>
+        <p class="footer-line"><a href="#tabs" data-tab="nouveautes">Nouveautés</a> · <a href="#tabs" data-tab="planning">Planning</a> · <a href="#tabs" data-tab="jeux">Jeux</a> · <a href="#tabs" data-tab="carte">La carte</a></p>
+        <p class="footer-line"><a href="mentions-legales.html">Mentions légales</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="mono">© 2026 — ANICHE, FRANCE</p>
+      <!-- Mention obligatoire (loi Évin, art. L3323-4 CSP) — texte fixe -->
+      <p class="mono">L'ABUS D'ALCOOL EST DANGEREUX POUR LA SANTÉ, À CONSOMMER AVEC MODÉRATION.</p>
+    </div>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="games.js"></script>
+  <script src="site.js"></script>
+</body>
+</html>

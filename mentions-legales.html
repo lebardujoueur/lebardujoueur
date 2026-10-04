@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mentions légales — Le Bar du Joueur</title>
+  <meta name="description" content="Mentions légales du site Le Bar du Joueur.">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Page simple, pas de moteur de scroll : juste les tokens du thème. */
+    body { overflow-x: hidden; }
+    .legal-page {
+      max-width: 720px; margin: 0 auto;
+      padding: 12vh var(--gutter) 14vh;
+    }
+    .legal-back {
+      display: inline-block; margin-bottom: 6vh;
+      font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em;
+      color: var(--ash); border-bottom: 1px solid var(--ink-faint);
+    }
+    .legal-back:hover { color: var(--ink); border-color: var(--ink); }
+    .legal-page h1 {
+      font-size: clamp(30px, 5vw, 44px); letter-spacing: -0.02em;
+      margin-bottom: 8vh;
+    }
+    .legal-section { margin-bottom: 6vh; }
+    .legal-section h2 {
+      font-family: var(--mono); font-size: 13px; letter-spacing: 0.04em;
+      text-transform: uppercase; color: var(--lime-deep); margin-bottom: 16px;
+      font-weight: 400;
+    }
+    .legal-section p { margin-bottom: 12px; line-height: 1.6; color: var(--ink); }
+    .legal-section p.ash { color: var(--ash); font-size: 15px; }
+    .legal-section a { border-bottom: 1px solid var(--ink-faint); }
+    .legal-section a:hover { border-color: var(--ink); }
+    .legal-todo {
+      display: inline-block; margin-top: 4px;
+      font-family: var(--mono); font-size: 11px; letter-spacing: 0.03em;
+      color: var(--lime-ink); background: var(--lime);
+      padding: 3px 9px; border-radius: 999px;
+    }
+  </style>
+</head>
+<body>
+  <div class="legal-page">
+    <a class="legal-back" href="index.html">← RETOUR AU SITE</a>
+    <h1>Mentions légales</h1>
+
+    <div class="legal-section">
+      <h2>Éditeur du site</h2>
+      <p>LE BAR DU JOUEUR — Société à responsabilité limitée à associé unique (EURL) au capital de 6 000,00 €.</p>
+      <p>Immatriculée au Registre du Commerce et des Sociétés de Douai sous le numéro 106 750 854.</p>
+      <p>Siège social : 29 rue Henri Barbusse, 59580 Aniche, France.</p>
+      <p>Gérant et directeur de la publication : Sylvain Margerin.</p>
+      <p>Contact : <a href="mailto:sylvainmargerin@gmail.com">sylvainmargerin@gmail.com</a></p>
+    </div>
+
+    <div class="legal-section">
+      <h2>Hébergement</h2>
+      <p class="ash">À compléter avant la mise en ligne définitive : nom, adresse et téléphone de l'hébergeur choisi pour le site.</p>
+      <span class="legal-todo">À COMPLÉTER</span>
+    </div>
+
+    <div class="legal-section">
+      <h2>Vente et consommation d'alcool</h2>
+      <p>Le Bar du Joueur est titulaire d'une licence de boissons de 3ème catégorie. La vente d'alcool est interdite aux mineurs. L'accès à ce site est réservé aux personnes majeures.</p>
+      <p><strong>L'abus d'alcool est dangereux pour la santé, à consommer avec modération.</strong></p>
+    </div>
+
+    <div class="legal-section">
+      <h2>Propriété intellectuelle</h2>
+      <p>L'ensemble des textes, visuels et éléments graphiques de ce site est protégé par le droit d'auteur. Toute reproduction, même partielle, est soumise à autorisation préalable, sauf mention contraire ci-dessous.</p>
+      <p class="ash">Les visuels des jeux présentés dans l'onglet « Jeux » restent la propriété de leurs éditeurs respectifs (notamment Gigamic et les éditeurs des jeux distribués par Gigamic) et sont utilisés à titre informatif pour présenter les jeux disponibles dans l'établissement. Les photographies d'ambiance sont utilisées sous licence Unsplash (usage commercial libre).</p>
+    </div>
+
+    <div class="legal-section">
+      <h2>Données personnelles</h2>
+      <p class="ash">Ce site ne comporte aucun formulaire de collecte de données et ne dépose aucun cookie de mesure d'audience ou de publicité. La seule donnée traitée est la confirmation de votre majorité (stockée uniquement dans votre navigateur, jamais transmise à un serveur) afin de ne pas vous redemander votre âge à chaque visite. Pour toute question relative à vos données, contactez <a href="mailto:sylvainmargerin@gmail.com">sylvainmargerin@gmail.com</a>.</p>
+    </div>
+  </div>
+</body>
+</html>

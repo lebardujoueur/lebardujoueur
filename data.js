@@ -28,7 +28,7 @@ window.SITE = {
   stats: [
     { big: `200+`, label: `jeux de société` },
     { big: `Chaque semaine`, label: `tournois de cartes (TCG)` },
-    { big: `Licence 3`, label: `bières, vins et boissons sans alcool` }
+    { big: `Licence III`, label: `bières, vins et boissons sans alcool` }
   ],
 
   /* PLANNING — modifiez la semaine ici. Un jour par ligne :

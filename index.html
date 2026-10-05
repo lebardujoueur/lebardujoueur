@@ -10,6 +10,8 @@
   <script>
     /* Vérification d'âge (loi Évin) déjà validée lors d'une visite précédente. */
     try {
+      /* ?intro rejoue aussi la vérification d'âge : c'est son clic qui autorise le son. */
+      if (/[?&]intro\b/.test(location.search)) localStorage.removeItem('bar_du_joueur_age_ok');
       if (localStorage.getItem('bar_du_joueur_age_ok') === '1') {
         document.documentElement.setAttribute('data-age-ok', '1');
       }

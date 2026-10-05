@@ -15,12 +15,20 @@
     const AC = window.AudioContext || window.webkitAudioContext;
     if (!AC) return;
     try {
+      // iPhone : sans ça, l'interrupteur « silencieux » coupe tout son Web Audio.
+      try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
+      try {
+        const keep = new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=');
+        keep.play().catch(() => {});
+      } catch (e) {}
       ctx = new AC();
       ctx.resume && ctx.resume();
       const t0 = ctx.currentTime + 0.05;
       const master = ctx.createGain();
-      master.gain.value = 0.32;
-      master.connect(ctx.destination);
+      master.gain.value = 0.6;                       // plus fort : les haut-parleurs de téléphone sont faibles
+      const limiter = ctx.createDynamicsCompressor(); // évite la saturation à ce volume
+      limiter.threshold.value = -10; limiter.ratio.value = 12; limiter.attack.value = 0.003; limiter.release.value = 0.2;
+      master.connect(limiter); limiter.connect(ctx.destination);
 
       // 1) dés qui roulent : petits claquements de bruit filtré
       const len = Math.floor(ctx.sampleRate * 0.09);

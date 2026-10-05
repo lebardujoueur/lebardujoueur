@@ -29,7 +29,7 @@ window.SITE = {
     { big: `200+`, label: `jeux de société` },
     { big: `Chaque semaine`, label: `tournois de cartes (TCG)` },
     { big: `8`, label: `joueurs autour de la grande table` },
-    { big: `Sans alcool`, label: `boissons aussi` }
+    { big: `Sans alcool`, label: `un vrai choix de softs et boissons chaudes` }
   ],
 
   /* PLANNING — modifiez la semaine ici. Un jour par ligne :

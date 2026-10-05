@@ -24,12 +24,11 @@ window.SITE = {
     note: `La date sera annoncée sur nos réseaux.`
   },
 
-  /* 4 chiffres clés sous l'en-tête */
+  /* 3 chiffres clés sous l'en-tête */
   stats: [
     { big: `200+`, label: `jeux de société` },
     { big: `Chaque semaine`, label: `tournois de cartes (TCG)` },
-    { big: `8`, label: `joueurs autour de la grande table` },
-    { big: `Sans alcool`, label: `un vrai choix de softs et boissons chaudes` }
+    { big: `Licence 3`, label: `bières, vins et boissons sans alcool` }
   ],
 
   /* PLANNING — modifiez la semaine ici. Un jour par ligne :

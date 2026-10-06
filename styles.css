@@ -221,7 +221,7 @@ html[data-intro-done="1"] .intro { display: none; }
 /* Centrage : chiffres clés, titre, pastilles ; les listes restent dans une colonne centrée */
 .stats { text-align: center; }
 .tabs-head { text-align: center; }
-.tabs-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 36px; }
+.tabs-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-bottom: 40px; }
 .tab-panel { max-width: 880px; margin-left: auto; margin-right: auto; }
 .tab-panel[data-panel="carte"] { max-width: 1000px; }
 .panel-note { text-align: center; }
@@ -239,8 +239,8 @@ html[data-intro-done="1"] .intro { display: none; }
 .carte-price { white-space: nowrap; font-size: 17px; text-align: right; }
 .carte-warning { margin-top: 40px; text-align: center; color: var(--ash); font-size: 10px; }
 .tab-btn {
-  font-family: var(--mono); font-size: 13px; letter-spacing: .04em; text-transform: uppercase;
-  padding: 11px 24px; border-radius: 999px; border: 1px solid var(--ink-faint);
+  font-family: var(--mono); font-size: 17px; letter-spacing: .04em; text-transform: uppercase;
+  padding: 17px 38px; border-radius: 999px; border: 1px solid var(--ink-faint);
   background: transparent; color: var(--ash); cursor: pointer;
   transition: background .3s var(--ease-out), color .3s var(--ease-out), border-color .3s var(--ease-out);
 }
@@ -334,7 +334,7 @@ html[data-intro-done="1"] .intro { display: none; }
 }
 @media (max-width: 720px) {
   .block { padding-top: 64px; }
-  .tab-btn { padding: 9px 16px; font-size: 12px; }
+  .tab-btn { padding: 13px 20px; font-size: 14px; }
   .plan-row, .news-item { grid-template-columns: 1fr; gap: 6px; }
   .plan-row.today { margin: 0 -12px; padding-left: 12px; padding-right: 12px; }
   .mosaic { grid-template-columns: repeat(4, 1fr); }

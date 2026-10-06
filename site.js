@@ -83,13 +83,15 @@
     return d;
   };
   const RES = S.reservation || {};
-  const reservationHTML = (day) => `
+  const reservationHTML = (day, info) => info.complet
+    ? `<p class="res-full"><strong>Complet</strong> — toutes les places sont prises pour cette animation. Écrivez-nous pour vous inscrire sur liste d'attente.</p>`
+    : `
     <button type="button" class="btn btn-primary res-open">Réserver ma place</button>
     <form class="res-form" hidden>
       <label>Date souhaitée<input type="date" name="date" required min="${iso(new Date())}" value="${iso(nextDateOf(day))}"></label>
       <label>Nom et prénom<input type="text" name="nom" required autocomplete="name"></label>
       <label>Téléphone ou e-mail<input type="text" name="contact" required autocomplete="email"></label>
-      <label>Nombre de personnes<input type="number" name="nb" required min="1" max="${RES.maxPersonnes || 8}" value="1"></label>
+      <label>Nombre de personnes<input type="number" name="nb" required min="1" max="${Math.min(RES.maxPersonnes || 8, info.places || 99)}" value="1"></label>
       <label class="res-wide">Message (facultatif)<textarea name="msg" rows="2"></textarea></label>
       <button type="submit" class="btn btn-primary">Envoyer ma demande</button>
       <p class="res-legal">Ces informations servent uniquement à traiter votre réservation.</p>
@@ -101,12 +103,12 @@
     if (!info) return `<p class="plan-ev">${head}</p>`;
     const p = info.provider;
     return `<details class="plan-ev plan-ev-d" data-day="${attr(d.day)}" data-event="${attr((e.time + ' ' + e.label).trim())}">
-      <summary>${head}<span class="plan-more mono">${info.reservation ? 'INFOS & RÉSERVATION' : 'INFOS'}</span><span class="chev" aria-hidden="true"></span></summary>
+      <summary>${head}<span class="plan-more mono${info.complet ? ' full' : ''}">${info.complet ? 'COMPLET' : info.reservation ? 'INFOS & RÉSERVATION' : 'INFOS'}</span><span class="chev" aria-hidden="true"></span></summary>
       <div class="plan-body">
         ${info.desc ? `<p class="game-desc">${info.desc}</p>` : ''}
-        ${info.paf ? `<p class="plan-paf"><span class="mono">PAF</span><strong>${info.paf}</strong><span>participation aux frais</span></p>` : ''}
+        ${info.paf || info.places ? `<p class="plan-paf">${info.paf ? `<span class="mono">PAF</span><strong>${info.paf}</strong><span>participation aux frais</span>` : ''}${info.places ? `<span class="plan-places mono${info.complet ? ' full' : ''}">${info.complet ? 'COMPLET' : info.places + ' PLACES'}</span>` : ''}</p>` : ''}
         ${p ? `<div class="plan-provider"><p class="mono plan-provider-k">ORGANISÉ AVEC</p><p class="plan-provider-name">${p.name}</p>${p.text ? `<p class="plan-provider-text">${p.text}</p>` : ''}${p.url ? `<a class="game-video mono" href="${p.url}" target="_blank" rel="noopener">Site de ${p.name} ↗</a>` : ''}</div>` : ''}
-        ${info.reservation ? reservationHTML(d.day) : ''}
+        ${info.reservation ? reservationHTML(d.day, info) : ''}
       </div>
     </details>`;
   };

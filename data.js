@@ -138,12 +138,16 @@ Crêpe garnie | Nutella, confiture de fraises ou sucre | 3 €
        desc        description de la soirée
        paf         participation aux frais (ex. « Gratuit », « 3 € »)
        provider    { name, text, url }  le prestataire / organisateur et son lien
-       reservation true = affiche le bouton « Réserver » */
+       reservation true = affiche le bouton « Réserver »
+       places      nombre de places (ex. 32) : affiché sur la fiche et limite le nombre de personnes par demande
+       complet     mettre true quand toutes les places sont prises : le bouton « Réserver » est remplacé par « Complet » */
   evenements: [
     {
       match: `poker`,
       desc: `Tournoi de poker gratuit et convivial, organisé chaque semaine avec Red Cactus. On joue au Texas Hold'em, sans aucune mise d'argent à la table : les joueurs cumulent des points selon leur classement. Débutants bienvenus, l'équipe vous explique les règles.`,
       paf: `Gratuite`,
+      places: 32,
+      complet: false,
       provider: {
         name: `Red Cactus`,
         text: `Réseau national de poker amateur : des tournois gratuits dans des bars partenaires partout en France, avec un classement par points.`,

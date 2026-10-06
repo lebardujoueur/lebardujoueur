@@ -66,18 +66,19 @@ window.SITE = {
   ],
 
   /* PLANNING — modifiez la semaine ici. Un jour par ligne :
-        Jour | Titre | Description (facultative)
-     "Fermé" en titre grise la ligne ET retire le jour des "jours d'ouverture" affichés en haut. */
+        Jour | animation ; animation ; animation
+     Chaque animation commence par son heure : "20h Soirée poker" ou "18h–20h Happy Hour".
+     "Fermé" grise la ligne ET retire le jour des "jours d'ouverture" affichés en haut. */
   planning: {
-    note: `Semaine du 30 septembre — programme prévisionnel.`,
+    note: `Programme de la semaine — susceptible d'évoluer.`,
     week: `
 Lundi | Fermé
-Mardi | Soirée poker by Redcactus | Entrée gratuite, inscription sur le site Redcactus.
-Mercredi | Après-midi familles | Jeux courts et initiations, ambiance calme.
-Jeudi | Fermé
-Vendredi | Soirée à thème | Un thème différent chaque mois, annoncé sur les réseaux.
-Samedi | Grand jeu du soir | Parties longues, tables XXL, animateur sur place.
-Dimanche | Brunch & jeux calmes | Ouverture en douceur, jeux courts et conviviaux.
+Mardi | 20h Soirée poker (Redcactus)
+Mercredi | 14h Initiation TCG ; 19h Fléchette party
+Jeudi | 18h–20h Happy Hour
+Vendredi | 20h Soirée TCG (Lorcana, Magic)
+Samedi | 13h Ligue Pokémon ; 14h Belote ; 20h Karaoké
+Dimanche | 10h Draft TCG (Riftbound) ; 14h Loup-garou ; 21h Soirée foot (Ligue 1)
 `
   },
 

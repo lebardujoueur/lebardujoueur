@@ -55,9 +55,14 @@
 
   // ── Planning ──
   const P = S.planning || {};
+  const TIME = /^(\d{1,2}h(?:\d{2})?(?:\s*[–-]\s*\d{1,2}h(?:\d{2})?)?)\s+(.+)$/i;
   const days = (P.week || '').split('\n').map((l) => l.trim()).filter(Boolean).map((line) => {
-    const [day = '', title = '', desc = ''] = line.split('|').map((p) => p.trim());
-    return { day, title, desc, off: /^fermé/i.test(title) };
+    const [day = '', rest = ''] = line.split('|').map((p) => p.trim());
+    const events = rest.split(';').map((e) => e.trim()).filter(Boolean).map((e) => {
+      const m = e.match(TIME);
+      return m ? { time: m[1], label: m[2] } : { time: '', label: e };
+    });
+    return { day, events, off: /^fermé/i.test(rest) };
   });
   const ABBR = { lundi: 'Lun', mardi: 'Mar', mercredi: 'Mer', jeudi: 'Jeu', vendredi: 'Ven', samedi: 'Sam', dimanche: 'Dim' };
   const todayName = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'][new Date().getDay()];
@@ -70,7 +75,7 @@
     const isToday = d.day.toLowerCase() === todayName;
     return `<div class="plan-row${d.off ? ' off' : ''}${isToday ? ' today' : ''}">
       <span class="plan-day mono">${d.day}${isToday ? '<em>AUJOURD\'HUI</em>' : ''}</span>
-      <div><p class="plan-title">${d.title}</p>${d.desc ? `<p class="plan-desc">${d.desc}</p>` : ''}</div>
+      <div class="plan-events">${d.events.map((e) => `<p class="plan-ev"><span class="plan-time mono">${e.time}</span><span class="plan-title">${e.label}</span></p>`).join('')}</div>
     </div>`;
   }).join(''));
 

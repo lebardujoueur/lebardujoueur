@@ -238,14 +238,20 @@ html[data-intro-done="1"] .intro { display: none; }
 .carte-desc { color: var(--ash); font-size: 14px; margin-top: 2px; }
 .carte-price { white-space: nowrap; font-size: 17px; text-align: right; }
 .carte-warning { margin-top: 40px; text-align: center; color: var(--ash); font-size: 10px; }
+.tabs-hint { text-align: center; color: var(--lime-deep); font-size: 17px; font-weight: 600; margin: 14px 0 22px; }
+.tabs-hint::after { content: " ↓"; display: inline-block; animation: hintBob 1.4s ease-in-out infinite; }
+@keyframes hintBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
+.tabs-nav { gap: 18px; }
 .tab-btn {
-  font-family: var(--mono); font-size: 17px; letter-spacing: .04em; text-transform: uppercase;
-  padding: 17px 38px; border-radius: 999px; border: 1px solid var(--ink-faint);
-  background: transparent; color: var(--ash); cursor: pointer;
-  transition: background .3s var(--ease-out), color .3s var(--ease-out), border-color .3s var(--ease-out);
+  font-family: var(--mono); font-size: 23px; font-weight: 600; letter-spacing: .03em; text-transform: uppercase;
+  padding: 24px 52px; border-radius: 999px; border: 2px solid var(--ink);
+  background: #fff; color: var(--ink); cursor: pointer;
+  box-shadow: 0 5px 0 var(--ink);
+  transition: transform .15s var(--ease-out), box-shadow .15s var(--ease-out), background .25s var(--ease-out);
 }
-.tab-btn:hover { color: var(--ink); border-color: rgba(var(--ink-rgb), .4); }
-.tab-btn.active { background: var(--lime); color: var(--lime-ink); border-color: var(--lime); }
+.tab-btn:hover { background: var(--white); transform: translateY(-2px); box-shadow: 0 7px 0 var(--ink); }
+.tab-btn:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--ink); }
+.tab-btn.active { background: var(--lime); color: var(--lime-ink); border-color: var(--ink); }
 .tab-panel { display: none; }
 .tab-panel.active { display: block; animation: tabFade .45s var(--ease-out); }
 @keyframes tabFade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
@@ -334,7 +340,8 @@ html[data-intro-done="1"] .intro { display: none; }
 }
 @media (max-width: 720px) {
   .block { padding-top: 64px; }
-  .tab-btn { padding: 13px 20px; font-size: 14px; }
+  .tabs-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .tab-btn { padding: 20px 8px; font-size: 17px; }
   .plan-row, .news-item { grid-template-columns: 1fr; gap: 6px; }
   .plan-row.today { margin: 0 -12px; padding-left: 12px; padding-right: 12px; }
   .mosaic { grid-template-columns: repeat(4, 1fr); }

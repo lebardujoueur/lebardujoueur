@@ -124,6 +124,14 @@
   const planList = $('#planningList');
   if (planList) {
     planList.addEventListener('click', (ev) => {
+      const copy = ev.target.closest('.res-copy');
+      if (copy) {
+        const ta = copy.parentElement.querySelector('textarea');
+        ta.select();
+        try { (navigator.clipboard ? navigator.clipboard.writeText(ta.value) : Promise.reject()).catch(() => document.execCommand('copy')); } catch (e) { document.execCommand('copy'); }
+        copy.textContent = 'Message copié ✓';
+        return;
+      }
       const open = ev.target.closest('.res-open');
       if (!open) return;
       const form = open.parentElement.querySelector('.res-form');
@@ -156,7 +164,12 @@
         } catch (err) { status.textContent = `L'envoi a échoué. Écrivez-nous directement à ${B.email}.`; }
       } else {
         status.textContent = 'Votre application e-mail va s\'ouvrir : envoyez le message pour finaliser. Nous confirmerons votre place par retour.';
-        location.href = `mailto:${B.email}?subject=${encodeURIComponent('Réservation — ' + box.dataset.event)}&body=${encodeURIComponent(lines.join('\n'))}`;
+        // secours : sur certains téléphones aucune application e-mail ne s'ouvre → on affiche le message à copier
+        let fb = form.querySelector('.res-fallback');
+        if (!fb) { fb = document.createElement('div'); fb.className = 'res-fallback'; form.appendChild(fb); }
+        fb.innerHTML = `<p>Rien ne s'est ouvert ? Copiez ce message et envoyez-le à <strong>${B.email}</strong> :</p><textarea readonly rows="6"></textarea><button type="button" class="res-copy">Copier le message</button>`;
+        fb.querySelector('textarea').value = lines.join('\n');
+        location.href =`mailto:${B.email}?subject=${encodeURIComponent('Réservation — ' + box.dataset.event)}&body=${encodeURIComponent(lines.join('\n'))}`;
       }
     });
   }

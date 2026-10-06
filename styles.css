@@ -254,6 +254,9 @@ html[data-intro-done="1"] .intro { display: none; }
 .res-form input:focus, .res-form textarea:focus { outline: 2px solid var(--lime); border-color: transparent; }
 .res-form .btn { justify-self: start; border: 0; cursor: pointer; font-family: inherit; font-size: 16px; padding: 12px 22px; }
 .res-legal { color: var(--ash); font-size: 12px; }
+.res-fallback { grid-column: 1 / -1; display: grid; gap: 10px; background: #fff; border: 1px dashed rgba(var(--ink-rgb), .35); border-radius: 8px; padding: 14px; font-size: 14px; }
+.res-fallback textarea { font-size: 14px; }
+.res-copy { justify-self: start; border: 2px solid var(--ink); background: var(--white); cursor: pointer; font-family: inherit; font-size: 15px; padding: 9px 18px; border-radius: 999px; }
 .res-status { font-size: 14px; color: var(--lime-deep); font-weight: 500; }
 .plan-time { color: var(--orange-deep); font-weight: 500; font-size: 14px; }
 .plan-title { font-size: 20px; }
@@ -387,10 +390,17 @@ html[data-intro-done="1"] .intro { display: none; }
   .tab-btn { padding: 20px 8px; font-size: 17px; }
   .plan-row, .news-item { grid-template-columns: 1fr; gap: 6px; }
   .plan-body { margin-left: 0; padding: 16px; }
-  .plan-ev-d summary { grid-template-columns: 70px 1fr 18px; }
-  .plan-more { display: none; }
+  /* téléphone : le repère « INFOS & RÉSERVATION » reste visible, sous le titre */
+  .plan-ev-d summary { grid-template-columns: 70px 1fr 18px; grid-template-areas: "time title chev" ". more more"; row-gap: 8px; }
+  .plan-ev-d summary .plan-time { grid-area: time; }
+  .plan-ev-d summary .plan-title { grid-area: title; }
+  .plan-ev-d summary .chev { grid-area: chev; }
+  .plan-ev-d summary .plan-more { grid-area: more; justify-self: start; font-size: 12px; padding: 7px 14px; background: rgba(171, 203, 57, .28); border-width: 2px; }
+  .plan-ev-d summary .plan-more.full { background: #b3261e; }
   .plan-ev { grid-template-columns: 70px 1fr; }
   .res-form { grid-template-columns: 1fr; }
+  .res-open, .res-form .btn { min-height: 52px; width: 100%; justify-self: stretch; font-size: 17px; }
+  .res-form input, .res-form textarea { padding: 13px 12px; }
   .plan-row.today { margin: 0 -12px; padding-left: 12px; padding-right: 12px; }
   .mosaic { grid-template-columns: repeat(4, 1fr); }
   .filter-group .label { flex: 0 0 auto; width: auto; }

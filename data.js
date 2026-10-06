@@ -48,10 +48,10 @@ window.SITE = {
       icon: `die`,
       name: `Le Champion`,
       tagline: `Vous jouez à l'occasion`,
-      price: `3 € – 5 €`,
+      price: `À partir de 3 €`,
       priceNote: `Participation réglée à la table, dès qu'un jeu sort de la ludothèque.`,
       extra: ``,
-      bonuses: [`3 € jusqu'à 2 h de jeu`, `5 € au-delà de 2 h`]
+      bonuses: [`3 € jusqu'à 2 h de jeu`, `+ 2 € au-delà de 2 h`]
     },
     {
       icon: `crown`,

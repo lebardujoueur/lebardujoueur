@@ -60,7 +60,7 @@ window.SITE = {
       price: `20 € / mois`,
       priceNote: `L'adhésion remplace la PAF à chaque venue.`,
       extra: ``,
-      bonuses: [`Accès illimité`, `Accompagnement offert`, `−10 % sur les boissons`, `−10 % sur les événements et la boutique TCG`],
+      bonuses: [`Accès illimité`, `Accompagnement offert : un invité par mois sur une session d'accès aux jeux`, `−10 % sur les boissons`, `−10 % sur les événements et la boutique TCG`],
       featured: true
     }
   ],

@@ -9,12 +9,15 @@
 
 :root {
   --ink-rgb: 26, 25, 21;
-  --bone: #ffffff;    /* fond du site : blanc */
+  --bone: #fbf4df;    /* fond du site : ivoire */
   --ink: #1a1915;     /* texte principal */
-  --ash: #6b6962;     /* texte secondaire */
-  --white: #f4f3ef;   /* cartes / surfaces, très légèrement grisées */
-  --lime-deep: #6b8a0e; /* vert foncé pour le TEXTE vert (le vert vif est illisible sur blanc) */
+  --ash: #655f52;     /* texte secondaire (légèrement chaud, lisible sur ivoire) */
+  --white: #fffdf6;   /* cartes / surfaces : crème clair, ressort sur l'ivoire */
+  --lime-deep: #667f0c; /* vert foncé pour le TEXTE vert (le vert vif est illisible sur clair) */
   --lime: #abcb39;
+  --orange: #ec7a1c;      /* les couleurs du dé du logo */
+  --orange-deep: #b4540a; /* orange pour le TEXTE */
+  --sun: #f2c230;
   --lime-ink: #1a1915;
   --ink-faint: rgba(var(--ink-rgb), 0.16);
   --sans: 'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif;
@@ -39,13 +42,13 @@ a { color: inherit; text-decoration: none; }
 h1, h2, h3 { font-weight: 400; }
 .mono { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; }
 .label { color: var(--ash); font-size: 11px; letter-spacing: 0.06em; margin-bottom: 10px; }
-.kicker { color: var(--ash); }
+.kicker { color: var(--orange-deep); font-weight: 500; }
 
 /* ═══ Vérification d'âge (loi Évin) ═══ */
 html:not([data-age-ok="1"]) body { overflow: hidden; height: 100vh; }
 .age-gate {
   position: fixed; inset: 0; z-index: 9999;
-  background: #fff; color: #1a1915;   /* écran d'ouverture : fond blanc, logo officiel */
+  background: var(--bone); color: #1a1915;   /* écran d'ouverture : même fond ivoire que le site */
   display: flex; align-items: center; justify-content: center; padding: 24px;
   transition: opacity .4s var(--ease-out), visibility 0s linear .4s;
 }
@@ -66,7 +69,7 @@ html[data-age-ok="1"] .age-gate { opacity: 0; visibility: hidden; pointer-events
 html:not([data-intro-done="1"]) body { overflow: hidden; height: 100vh; }
 html[data-intro-done="1"] .intro { display: none; }
 .intro {
-  position: fixed; inset: 0; z-index: 9000; background: #fff;      /* même fond blanc que l'écran d'ouverture */
+  position: fixed; inset: 0; z-index: 9000; background: var(--bone);      /* même fond ivoire que l'écran d'ouverture */
   display: flex; align-items: center; justify-content: center; overflow: hidden;
   transition: opacity .6s ease;
 }
@@ -129,8 +132,8 @@ html[data-intro-done="1"] .intro { display: none; }
   position: sticky; top: 0; z-index: 50;
   display: flex; align-items: center; gap: 24px;
   padding: 12px var(--gutter);
-  background: rgba(255, 255, 255, .92); backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--ink-faint);
+  background: rgba(251, 244, 223, .92); backdrop-filter: blur(10px);
+  border-bottom: 3px solid var(--lime);
 }
 .brand { display: flex; align-items: center; gap: 10px; font-size: 19px; font-weight: 500; letter-spacing: -0.01em; }
 .brand img { width: 28px; height: 28px; object-fit: contain; }
@@ -144,6 +147,11 @@ html[data-intro-done="1"] .intro { display: none; }
   max-width: var(--max); margin: 0 auto;
   padding: 56px var(--gutter) 40px;
   display: grid; grid-template-columns: 1fr; text-align: center; justify-items: center;
+  /* halos de couleur (les teintes du dé) derrière le logo */
+  background:
+    radial-gradient(ellipse 34% 46% at 22% 38%, rgba(236, 122, 28, .20), transparent 70%),
+    radial-gradient(ellipse 34% 46% at 78% 42%, rgba(171, 203, 57, .26), transparent 70%),
+    radial-gradient(ellipse 30% 36% at 50% 8%, rgba(242, 194, 48, .26), transparent 70%);
 }
 .hero .kicker { margin-bottom: 18px; }
 /* le titre est le logo officiel (écriture + dé superposés) */
@@ -174,14 +182,17 @@ html[data-intro-done="1"] .intro { display: none; }
   max-width: var(--max); margin: 0 auto; padding: 56px var(--gutter) 0;
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
 }
-.stat { border-top: 1px solid var(--ink-faint); padding-top: 16px; }
+.stat { border-top: 5px solid var(--lime); padding-top: 16px; }
+.stat:nth-child(2) { border-top-color: var(--orange); }
+.stat:nth-child(3) { border-top-color: var(--sun); }
 .stat-big { font-size: clamp(24px, 3vw, 40px); letter-spacing: -0.02em; line-height: 1.1; }
 .stat-label { color: var(--ash); font-size: 14px; margin-top: 6px; }
 
 /* ═══ Formules (3 encarts) ═══ */
 .formules { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: stretch; }
-.formule { position: relative; background: var(--white); border: 1px solid var(--ink-faint); border-radius: 10px; padding: 28px 24px 26px; text-align: left; }
-.formule.featured { border: 2px solid var(--lime); background: #fff; box-shadow: 0 10px 30px rgba(107, 138, 14, .14); }
+.formule { position: relative; background: var(--white); border: 1px solid var(--ink-faint); border-top: 6px solid var(--sun); border-radius: 10px; padding: 28px 24px 26px; text-align: left; box-shadow: 0 6px 18px rgba(var(--ink-rgb), .06); }
+.formule:nth-child(2) { border-top-color: var(--orange); }
+.formule.featured { border: 2px solid var(--lime); border-top: 6px solid var(--lime); background: var(--white); box-shadow: 0 12px 32px rgba(107, 138, 14, .22); }
 .formule-badge { position: absolute; top: -12px; left: 24px; background: var(--lime); color: var(--lime-ink); font-size: 11px; letter-spacing: .08em; padding: 4px 10px; border-radius: 999px; }
 .formule-icon { display: grid; place-items: center; width: 46px; height: 46px; border-radius: 50%; border: 1px solid var(--lime); color: var(--lime-deep); margin-bottom: 16px; }
 .formule-icon svg { width: 24px; height: 24px; }
@@ -232,20 +243,19 @@ html[data-intro-done="1"] .intro { display: none; }
 
 /* La carte */
 .carte-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 44px 56px; }
-.carte-cat h3 { font-weight: 400; color: var(--ash); text-transform: uppercase; letter-spacing: .06em; font-size: 13px; padding-bottom: 12px; border-bottom: 1px solid var(--ink); }
+.carte-cat h3 { font-weight: 500; color: var(--orange-deep); text-transform: uppercase; letter-spacing: .06em; font-size: 13px; padding-bottom: 12px; border-bottom: 1px solid var(--ink); }
 .carte-item { display: flex; justify-content: space-between; align-items: baseline; gap: 18px; padding: 12px 0; border-bottom: 1px solid var(--ink-faint); }
 .carte-name { font-size: 17px; }
 .carte-desc { color: var(--ash); font-size: 14px; margin-top: 2px; }
 .carte-price { white-space: nowrap; font-size: 17px; text-align: right; }
 .carte-warning { margin-top: 40px; text-align: center; color: var(--ash); font-size: 10px; }
-.tabs-hint { text-align: center; color: var(--lime-deep); font-size: 17px; font-weight: 600; margin: 14px 0 22px; }
-.tabs-hint::after { content: " ↓"; display: inline-block; animation: hintBob 1.4s ease-in-out infinite; }
-@keyframes hintBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
+#tabs .tabs-head { margin-bottom: 28px; }
+#tabs .tabs-head .kicker { font-size: clamp(26px, 4vw, 40px); font-weight: 500; letter-spacing: .08em; }
 .tabs-nav { gap: 18px; }
 .tab-btn {
   font-family: var(--mono); font-size: 23px; font-weight: 600; letter-spacing: .03em; text-transform: uppercase;
   padding: 24px 52px; border-radius: 999px; border: 2px solid var(--ink);
-  background: #fff; color: var(--ink); cursor: pointer;
+  background: var(--white); color: var(--ink); cursor: pointer;
   box-shadow: 0 5px 0 var(--ink);
   transition: transform .15s var(--ease-out), box-shadow .15s var(--ease-out), background .25s var(--ease-out);
 }
@@ -312,7 +322,7 @@ html[data-intro-done="1"] .intro { display: none; }
 .mosaic img { width: 100%; aspect-ratio: 1 / 1; object-fit: contain; background: var(--white); border-radius: var(--radius); }
 
 /* ═══ Pied de page ═══ */
-.footer { margin-top: 96px; border-top: 1px solid var(--ink-faint); padding: 56px var(--gutter) 28px; }
+.footer { margin-top: 96px; border-top: 5px solid var(--lime); background: #f1efc4; padding: 56px var(--gutter) 28px; }
 .footer-grid { max-width: var(--max); margin: 0 auto; display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 32px; }
 .footer-brand { font-size: 28px; letter-spacing: -0.02em; }
 .footer-line { color: var(--ash); margin-top: 8px; font-size: 15px; }

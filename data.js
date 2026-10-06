@@ -132,6 +132,35 @@ Crêpe garnie | Nutella, confiture de fraises ou sucre | 3 €
 `
   },
 
+  /* FICHES D'ÉVÉNEMENTS — au clic sur une animation du planning.
+     `match` = un mot qui se trouve dans le nom de l'animation (ex. "poker" pour « Soirée poker (Redcactus) »).
+     Champs (tous facultatifs sauf match) :
+       desc        description de la soirée
+       paf         participation aux frais (ex. « Gratuit », « 3 € »)
+       provider    { name, text, url }  le prestataire / organisateur et son lien
+       reservation true = affiche le bouton « Réserver » */
+  evenements: [
+    {
+      match: `poker`,
+      desc: `Tournoi de poker gratuit et convivial, organisé chaque semaine avec Red Cactus. On joue au Texas Hold'em, sans aucune mise d'argent à la table : les joueurs cumulent des points selon leur classement. Débutants bienvenus, l'équipe vous explique les règles.`,
+      paf: `Gratuite`,
+      provider: {
+        name: `Red Cactus`,
+        text: `Réseau national de poker amateur : des tournois gratuits dans des bars partenaires partout en France, avec un classement par points.`,
+        url: `https://www.redcactuspoker.fr`
+      },
+      reservation: true
+    }
+  ],
+
+  /* RÉSERVATION — sans serveur, la demande part par e-mail vers l'adresse du bar.
+     Plus tard, pour recevoir les réservations dans un tableau (Formspree, Tally…), collez ici l'adresse
+     du formulaire dans `endpoint` : le site l'utilisera automatiquement. */
+  reservation: {
+    endpoint: ``,
+    maxPersonnes: 8
+  },
+
   jeuxNote: `Filtrez par âge ou par catégorie pour trouver le jeu adapté. La liste s'agrandit au fil des arrivages.`,
 
   /* ACTUS — le plus récent en premier. `images` facultatif. */

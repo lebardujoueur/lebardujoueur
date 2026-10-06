@@ -71,13 +71,93 @@
   set('#kiDays', openDays.map((d) => ABBR[d.day.toLowerCase()] || d.day).join(' · ') || 'À annoncer');
   set('#kiClosed', closedDays.length ? `Fermé : ${closedDays.map((d) => d.day.toLowerCase()).join(', ')} (prévisionnel)` : 'Programme prévisionnel');
   set('#planningNote', P.note || '');
+  // Fiche d'une animation (clic) : description, PAF, prestataire, réservation
+  const norm = (s) => (s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+  const attr = (s) => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+  const infoFor = (label) => (S.evenements || []).find((ev) => ev.match && norm(label).includes(norm(ev.match)));
+  const DAYNUM = { dimanche: 0, lundi: 1, mardi: 2, mercredi: 3, jeudi: 4, vendredi: 5, samedi: 6 };
+  const iso = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  const nextDateOf = (dayName) => {
+    const d = new Date(); d.setHours(0, 0, 0, 0);
+    d.setDate(d.getDate() + ((DAYNUM[norm(dayName)] - d.getDay() + 7) % 7));
+    return d;
+  };
+  const RES = S.reservation || {};
+  const reservationHTML = (day) => `
+    <button type="button" class="btn btn-primary res-open">Réserver ma place</button>
+    <form class="res-form" hidden>
+      <label>Date souhaitée<input type="date" name="date" required min="${iso(new Date())}" value="${iso(nextDateOf(day))}"></label>
+      <label>Nom et prénom<input type="text" name="nom" required autocomplete="name"></label>
+      <label>Téléphone ou e-mail<input type="text" name="contact" required autocomplete="email"></label>
+      <label>Nombre de personnes<input type="number" name="nb" required min="1" max="${RES.maxPersonnes || 8}" value="1"></label>
+      <label class="res-wide">Message (facultatif)<textarea name="msg" rows="2"></textarea></label>
+      <button type="submit" class="btn btn-primary">Envoyer ma demande</button>
+      <p class="res-legal">Ces informations servent uniquement à traiter votre réservation.</p>
+      <p class="res-status" role="status"></p>
+    </form>`;
+  const eventHTML = (d, e) => {
+    const head = `<span class="plan-time mono">${e.time}</span><span class="plan-title">${e.label}</span>`;
+    const info = infoFor(e.label);
+    if (!info) return `<p class="plan-ev">${head}</p>`;
+    const p = info.provider;
+    return `<details class="plan-ev plan-ev-d" data-day="${attr(d.day)}" data-event="${attr((e.time + ' ' + e.label).trim())}">
+      <summary>${head}<span class="plan-more mono">${info.reservation ? 'INFOS & RÉSERVATION' : 'INFOS'}</span><span class="chev" aria-hidden="true"></span></summary>
+      <div class="plan-body">
+        ${info.desc ? `<p class="game-desc">${info.desc}</p>` : ''}
+        ${info.paf ? `<p class="plan-paf"><span class="mono">PAF</span><strong>${info.paf}</strong><span>participation aux frais</span></p>` : ''}
+        ${p ? `<div class="plan-provider"><p class="mono plan-provider-k">ORGANISÉ AVEC</p><p class="plan-provider-name">${p.name}</p>${p.text ? `<p class="plan-provider-text">${p.text}</p>` : ''}${p.url ? `<a class="game-video mono" href="${p.url}" target="_blank" rel="noopener">Site de ${p.name} ↗</a>` : ''}</div>` : ''}
+        ${info.reservation ? reservationHTML(d.day) : ''}
+      </div>
+    </details>`;
+  };
   put('#planningList', days.map((d) => {
     const isToday = d.day.toLowerCase() === todayName;
     return `<div class="plan-row${d.off ? ' off' : ''}${isToday ? ' today' : ''}">
       <span class="plan-day mono">${d.day}${isToday ? '<em>AUJOURD\'HUI</em>' : ''}</span>
-      <div class="plan-events">${d.events.map((e) => `<p class="plan-ev"><span class="plan-time mono">${e.time}</span><span class="plan-title">${e.label}</span></p>`).join('')}</div>
+      <div class="plan-events">${d.events.map((e) => eventHTML(d, e)).join('')}</div>
     </div>`;
   }).join(''));
+
+  // Réservation : bouton → formulaire → envoi (formulaire distant si `endpoint`, sinon e-mail)
+  const planList = $('#planningList');
+  if (planList) {
+    planList.addEventListener('click', (ev) => {
+      const open = ev.target.closest('.res-open');
+      if (!open) return;
+      const form = open.parentElement.querySelector('.res-form');
+      form.hidden = !form.hidden;
+      open.textContent = form.hidden ? 'Réserver ma place' : 'Fermer le formulaire';
+    });
+    planList.addEventListener('submit', async (ev) => {
+      const form = ev.target.closest('.res-form');
+      if (!form) return;
+      ev.preventDefault();
+      const box = form.closest('.plan-ev-d');
+      const f = new FormData(form);
+      const status = form.querySelector('.res-status');
+      const when = new Date(f.get('date') + 'T00:00:00');
+      if (DAYNUM[norm(box.dataset.day)] !== when.getDay()) {
+        status.textContent = `Cette animation a lieu le ${box.dataset.day.toLowerCase()} : choisissez une date correspondante.`;
+        return;
+      }
+      const dateFr = when.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+      const lines = [`Animation : ${box.dataset.event}`, `Date : ${dateFr}`, `Nom : ${f.get('nom')}`, `Contact : ${f.get('contact')}`,
+        `Nombre de personnes : ${f.get('nb')}`, f.get('msg') ? `Message : ${f.get('msg')}` : ''].filter(Boolean);
+      if (RES.endpoint) {
+        status.textContent = 'Envoi en cours…';
+        try {
+          const r = await fetch(RES.endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+            body: JSON.stringify({ animation: box.dataset.event, date: dateFr, nom: f.get('nom'), contact: f.get('contact'), personnes: f.get('nb'), message: f.get('msg') || '' }) });
+          if (!r.ok) throw new Error('http ' + r.status);
+          status.textContent = 'Merci ! Votre demande est bien envoyée. Nous vous confirmons votre place très vite.';
+          form.reset();
+        } catch (err) { status.textContent = `L'envoi a échoué. Écrivez-nous directement à ${B.email}.`; }
+      } else {
+        status.textContent = 'Votre application e-mail va s\'ouvrir : envoyez le message pour finaliser. Nous confirmerons votre place par retour.';
+        location.href = `mailto:${B.email}?subject=${encodeURIComponent('Réservation — ' + box.dataset.event)}&body=${encodeURIComponent(lines.join('\n'))}`;
+      }
+    });
+  }
 
   // ── Actus ──
   put('#newsList', (S.news || []).map((n) => `<article class="news-item">

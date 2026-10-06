@@ -31,6 +31,28 @@
   put('#stats', (S.stats || []).map((s) =>
     `<div class="stat"><p class="stat-big">${s.big}</p><p class="stat-label">${s.label}</p></div>`).join(''));
 
+  // ── Formules ──
+  const ICONS = {
+    cup: '<path d="M5 9h11v5a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5V9z"/><path d="M16 10h2a2 2 0 0 1 0 4h-2"/><path d="M8 3v3M12 3v3"/>',
+    die: '<rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="8.5" cy="8.5" r=".9"/><circle cx="15.5" cy="8.5" r=".9"/><circle cx="12" cy="12" r=".9"/><circle cx="8.5" cy="15.5" r=".9"/><circle cx="15.5" cy="15.5" r=".9"/>',
+    crown: '<path d="M4 18h16l1-10-5 4-4-7-4 7-5-4z"/>'
+  };
+  put('#formulesGrid', (S.formules || []).map((f) => {
+    const todo = (t) => /^À COMPLÉTER/i.test(t);
+    return `<article class="formule${f.featured ? ' featured' : ''}">
+      ${f.featured ? '<span class="formule-badge mono">LA PLUS COMPLÈTE</span>' : ''}
+      ${ICONS[f.icon] ? `<span class="formule-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${ICONS[f.icon]}</svg></span>` : ''}
+      <h3>${f.name}</h3>
+      <p class="formule-tagline">${f.tagline || ''}</p>
+      <p class="formule-price${todo(f.price) ? ' todo' : ''}">${f.price || ''}</p>
+      ${f.priceNote ? `<p class="formule-pricenote">${f.priceNote}</p>` : ''}
+      ${f.extra ? `<p class="formule-extra">${f.extra}</p>` : ''}
+      ${(f.bonuses || []).length ? `<ul>${f.bonuses.map((b) => `<li${todo(b) ? ' class="todo"' : ''}>${b}</li>`).join('')}</ul>` : ''}
+    </article>`;
+  }).join(''));
+
+  set('#formulesNote', S.formulesNote || '');
+
   // ── Planning ──
   const P = S.planning || {};
   const days = (P.week || '').split('\n').map((l) => l.trim()).filter(Boolean).map((line) => {

@@ -27,8 +27,42 @@ window.SITE = {
   /* 3 chiffres clés sous l'en-tête */
   stats: [
     { big: `200+`, label: `jeux de société` },
-    { big: `Chaque semaine`, label: `tournois de cartes (TCG)` },
+    { big: `Tournois de jeux`, label: `chaque semaine` },
     { big: `Licence III`, label: `bières, vins et boissons sans alcool` }
+  ],
+
+  /* LES FORMULES — 3 façons de consommer le bar. Modifiez ici.
+     `extra` = ligne d'introduction (ex. « Tout le Champion, plus : »). `bonuses` = une puce par avantage. */
+  formulesNote: `PAF = participation aux frais de jeu. Pas d'achat en ligne : demandez votre carte Légende au comptoir.`,
+  formules: [
+    {
+      icon: `cup`,
+      name: `Le Soifard`,
+      tagline: `Vous venez boire un verre, sans jouer`,
+      price: `0 €`,
+      priceNote: `Installez-vous où vous voulez, comme dans n'importe quel bar.`,
+      extra: ``,
+      bonuses: []
+    },
+    {
+      icon: `die`,
+      name: `Le Champion`,
+      tagline: `Vous jouez à l'occasion`,
+      price: `3 € – 5 €`,
+      priceNote: `Participation réglée à la table, dès qu'un jeu sort de la ludothèque.`,
+      extra: ``,
+      bonuses: [`3 € jusqu'à 2 h de jeu`, `5 € au-delà de 2 h`]
+    },
+    {
+      icon: `crown`,
+      name: `La Légende`,
+      tagline: `Vous jouez régulièrement`,
+      price: `20 € / mois`,
+      priceNote: `L'adhésion remplace la PAF à chaque venue.`,
+      extra: ``,
+      bonuses: [`Accès illimité`, `Accompagnement offert`, `−10 % sur les boissons`, `−10 % sur les événements et la boutique TCG`],
+      featured: true
+    }
   ],
 
   /* PLANNING — modifiez la semaine ici. Un jour par ligne :

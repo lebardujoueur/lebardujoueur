@@ -33,7 +33,7 @@ window.SITE = {
 
   /* LES FORMULES — 3 façons de consommer le bar. Modifiez ici.
      `extra` = ligne d'introduction (ex. « Tout le Champion, plus : »). `bonuses` = une puce par avantage. */
-  formulesNote: `PAF = participation aux frais de jeu. Pas d'achat en ligne : demandez votre carte Légende au comptoir.`,
+  formulesNote: ``,
   formules: [
     {
       icon: `cup`,
@@ -58,7 +58,7 @@ window.SITE = {
       name: `La Légende`,
       tagline: `Vous jouez régulièrement`,
       price: `20 € / mois`,
-      priceNote: `L'adhésion remplace la PAF à chaque venue.`,
+      priceNote: ``,
       extra: ``,
       bonuses: [`Accès illimité`, `Accompagnement offert : un invité par mois sur une session d'accès aux jeux`, `−10 % sur les boissons`, `−10 % sur les événements et la boutique TCG`],
       featured: true

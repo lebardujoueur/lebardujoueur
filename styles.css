@@ -204,6 +204,7 @@ html[data-intro-done="1"] .intro { display: none; }
 .formule ul { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 9px; }
 .formule li { position: relative; padding-left: 22px; font-size: 15px; line-height: 1.4; }
 .formule li::before { content: ""; position: absolute; left: 0; top: .45em; width: 9px; height: 9px; border-radius: 50%; background: var(--lime); }
+.formules-note:empty { display: none; }
 .formules-note { text-align: center; color: var(--ash); margin-top: 26px; font-size: 15px; }
 .formule .todo, .formule li.todo { color: #b45309; font-style: italic; }
 .formule li.todo::before { background: #f59e0b; }

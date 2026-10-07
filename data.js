@@ -95,12 +95,12 @@ Bière bise ardente | 25 cl / 50 cl | 4 € / 7 €
 Bière la cuvée des trolls | 25 cl / 50 cl | 4,50 € / 7,50 €
 
 # Softs
-Coca-Cola | 33 cl, en verre | 3,50 €
-Coca-Cola Zéro | 33 cl, en verre | 3,50 €
-Orangina | 25 cl, en verre | 3,50 €
-Oasis | 25 cl, en verre | 3,50 €
-Fuze Tea | 33 cl, en verre | 3,50 €
-Perrier | 33 cl, en verre | 3,50 €
+Coca-Cola | 33 cl, en verre | 3 €
+Coca-Cola Zéro | 33 cl, en verre | 3 €
+Orangina | 25 cl, en verre | 3 €
+Oasis | 25 cl, en verre | 3 €
+Fuze Tea | 33 cl, en verre | 3 €
+Perrier | 33 cl, en verre | 3 €
 Limonade blanche | 25 cl | 2,80 €
 Diabolo | 25 cl | 3 €
 Cristaline | 50 cl | 2,50 €

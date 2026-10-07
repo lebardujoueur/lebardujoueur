@@ -200,6 +200,7 @@ html[data-intro-done="1"] .intro { display: none; }
 .formule-tagline { color: var(--ash); margin-top: 6px; font-size: 15px; }
 .formule-price { font-size: 22px; margin-top: 18px; color: var(--lime-deep); font-weight: 600; }
 .formule-pricenote { color: var(--ash); font-size: 13px; margin-top: 2px; }
+.formule-tagline + .formule-pricenote { margin-top: 18px; font-size: 15px; }
 .formule-extra { margin-top: 16px; font-size: 14px; font-weight: 600; }
 .formule ul { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 9px; }
 .formule li { position: relative; padding-left: 22px; font-size: 15px; line-height: 1.4; }

@@ -39,7 +39,7 @@ window.SITE = {
       icon: `cup`,
       name: `Le Soifard`,
       tagline: `Vous venez boire un verre, sans jouer`,
-      price: `0 €`,
+      price: ``,
       priceNote: `Installez-vous où vous voulez, comme dans n'importe quel bar.`,
       extra: ``,
       bonuses: []

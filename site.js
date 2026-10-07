@@ -44,7 +44,7 @@
       ${ICONS[f.icon] ? `<span class="formule-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${ICONS[f.icon]}</svg></span>` : ''}
       <h3>${f.name}</h3>
       <p class="formule-tagline">${f.tagline || ''}</p>
-      <p class="formule-price${todo(f.price) ? ' todo' : ''}">${f.price || ''}</p>
+      ${f.price ? `<p class="formule-price${todo(f.price) ? ' todo' : ''}">${f.price}</p>` : ''}
       ${f.priceNote ? `<p class="formule-pricenote">${f.priceNote}</p>` : ''}
       ${f.extra ? `<p class="formule-extra">${f.extra}</p>` : ''}
       ${(f.bonuses || []).length ? `<ul>${f.bonuses.map((b) => `<li${todo(b) ? ' class="todo"' : ''}>${b}</li>`).join('')}</ul>` : ''}

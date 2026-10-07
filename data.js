@@ -92,7 +92,7 @@ Dimanche | 10h Draft TCG (Riftbound) ; 14h Loup-garou ; 21h Soirée foot (Ligue 
 # Bières pression
 Bière bise blonde | 25 cl / 50 cl | 3 € / 5,50 €
 Bière bise ardente | 25 cl / 50 cl | 4 € / 7 €
-Bière la cuvée des trolls | 25 cl / 50 cl | 4,50 € / 8 €
+Bière la cuvée des trolls | 25 cl / 50 cl | 4,50 € / 7,50 €
 
 # Softs
 Coca-Cola | 33 cl, en verre | 3,50 €
@@ -108,15 +108,13 @@ Cristaline | 50 cl | 2,50 €
 # Vins
 Cabernet d'Anjou AOP, Pierre Chanau | 12 cl / 75 cl | 3,50 € / 16 €
 Rosé pamplemousse, Le Navoy | 12 cl / 75 cl | 3,80 € / 18 €
-Sauvignon IGP d'Ardèche | 12 cl / 1 l | 3,20 € / 15 €
-Monbazillac AOP, muscadelle / sauvignon | 12 cl / 1 l | 4 € / 21 €
 
 # Snacking
 Croque-monsieur | Pain, jambon, emmental | 6 €
 Hot-dog | Pain, saucisse de porc, moutarde, ketchup | 5 €
 Planche apéro duo | Emmental, saucissons, terrine de porc, olives, cornichons, tomates cerises, pain toasté | 12 €
 Saucisson fuet d'Espagne | 170 g | 6 €
-Chips Lays | 45 g | 3,50 €
+Chips Lays | 45 g | 3 €
 
 # Boissons chaudes
 Café expresso | 40 ml | 2 €
@@ -128,7 +126,7 @@ Chocolat chaud | 200 ml | 3 €
 Gaufre | 100 g | 3 €
 Cookie | 100 g | 3,80 €
 Crêpe nature | Sans garniture | 3 €
-Crêpe garnie | Nutella, confiture de fraises ou sucre | 3 €
+Crêpe garnie | Nutella, confiture de fraises ou sucre | 3,50 €
 `
   },
 

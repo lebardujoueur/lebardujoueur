@@ -124,7 +124,7 @@ Chocolat chaud | 200 ml | 3 €
 
 # Desserts
 Gaufre | 100 g | 3 €
-Cookie | 100 g | 3,80 €
+Cookie | 100 g | 3 €
 Crêpe nature | Sans garniture | 3 €
 Crêpe garnie | Nutella, confiture de fraises ou sucre | 3,50 €
 `

@@ -14,10 +14,79 @@
 
   let started = false, ctx = null, timers = [];
   let audioEl = null, audioReady = false;
-  const TOTAL = 7800;   // + 650 ms de fondu de sortie : ~8,5 s au total, sous les 10 s
+  /* Deux animations : « a » (l'écriture se dévoile, le dé se loge) et « b » (lancer de dé qui rebondit).
+     Le choix se fait dans la balise <head> de index.html (essai : ajouter ?intro=b à l'adresse). */
+  const VARIANT = root.getAttribute('data-intro-variant') === 'b' ? 'b' : 'a';
+  const TOTAL = VARIANT === 'b' ? 5400 : 7800;   // + 650 ms de fondu de sortie : ~6 s (b) ou ~8,5 s (a), sous les 10 s
+  const AUDIO_SECS = VARIANT === 'b' ? 6.0 : 8.6;
+
+  /* Jingle de la variante b : chute et rebonds du dé, glissement, arpège scintillant, cloche à l'atterrissage.
+     Calé sur les animations CSS (le dé tombe à 0,35 s ; impacts à 0,95 / 1,71 / 2,11 / 2,35 s ; il glisse à 3,0 s ; se loge à 3,9 s). */
+  function buildB(ac, out, t0) {
+    const master = ac.createGain();
+    master.gain.value = 0.6;
+    master.connect(out);
+
+    const noise = (dur) => {
+      const len = Math.floor(ac.sampleRate * dur), b = ac.createBuffer(1, len, ac.sampleRate), d = b.getChannelData(0);
+      for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1);
+      return b;
+    };
+    const sweep = (from, to, a, b, peak) => {            // souffle filtré qui monte (chute, glissement)
+      const src = ac.createBufferSource(); src.buffer = noise(b - a + 0.1);
+      const bp = ac.createBiquadFilter(); bp.type = 'bandpass'; bp.Q.value = 1.4;
+      bp.frequency.setValueAtTime(from, t0 + a); bp.frequency.exponentialRampToValueAtTime(to, t0 + b);
+      const g = ac.createGain();
+      g.gain.setValueAtTime(0.0001, t0 + a); g.gain.exponentialRampToValueAtTime(peak, t0 + b - 0.05); g.gain.exponentialRampToValueAtTime(0.0001, t0 + b + 0.06);
+      src.connect(bp); bp.connect(g); g.connect(master); src.start(t0 + a); src.stop(t0 + b + 0.1);
+    };
+    sweep(250, 2600, 0.30, 0.95, 0.55);
+
+    // impacts « tok » du dé sur le plateau (de plus en plus faibles)
+    [[0.95, 1.0], [1.71, 0.7], [2.11, 0.45], [2.35, 0.25]].forEach(([t, g]) => {
+      const o = ac.createOscillator(); o.type = 'sine';
+      o.frequency.setValueAtTime(230, t0 + t); o.frequency.exponentialRampToValueAtTime(62, t0 + t + 0.14);
+      const og = ac.createGain();
+      og.gain.setValueAtTime(g * 0.9, t0 + t); og.gain.exponentialRampToValueAtTime(0.001, t0 + t + 0.18);
+      o.connect(og); og.connect(master); o.start(t0 + t); o.stop(t0 + t + 0.2);
+      const n = ac.createBufferSource(); n.buffer = noise(0.05);
+      const bp = ac.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 1400; bp.Q.value = 1.6;
+      const ng = ac.createGain();
+      ng.gain.setValueAtTime(g * 0.7, t0 + t); ng.gain.exponentialRampToValueAtTime(0.001, t0 + t + 0.05);
+      n.connect(bp); bp.connect(ng); ng.connect(master); n.start(t0 + t); n.stop(t0 + t + 0.06);
+    });
+
+    sweep(400, 3200, 3.0, 3.85, 0.4);                    // le dé glisse vers sa place
+
+    // arpège scintillant (ré majeur) pendant que l'écriture se dévoile
+    [587.33, 739.99, 880.0, 1174.66, 1479.98, 1760.0].forEach((f, i) => {
+      const t = t0 + 3.35 + i * 0.1;
+      [[f, 0.3], [f * 2, 0.08]].forEach(([fr, g]) => {
+        const o = ac.createOscillator(); o.type = 'sine'; o.frequency.value = fr;
+        const og = ac.createGain();
+        og.gain.setValueAtTime(0.0001, t); og.gain.exponentialRampToValueAtTime(g, t + 0.012); og.gain.exponentialRampToValueAtTime(0.0001, t + 0.55);
+        o.connect(og); og.connect(master); o.start(t); o.stop(t + 0.6);
+      });
+    });
+
+    // atterrissage : cloche + accord chaud
+    [[1174.66, 0.5], [1760.0, 0.25], [2349.32, 0.22], [3236.0, 0.12]].forEach(([f, g]) => {
+      const o = ac.createOscillator(); o.type = 'sine'; o.frequency.value = f;
+      const og = ac.createGain();
+      og.gain.setValueAtTime(0.0001, t0 + 3.9); og.gain.exponentialRampToValueAtTime(g, t0 + 3.94); og.gain.exponentialRampToValueAtTime(0.0001, t0 + 5.6);
+      o.connect(og); og.connect(master); o.start(t0 + 3.9); o.stop(t0 + 5.7);
+    });
+    [146.83, 220.0, 293.66, 369.99].forEach((f) => {
+      const o = ac.createOscillator(); o.type = 'triangle'; o.frequency.value = f;
+      const og = ac.createGain();
+      og.gain.setValueAtTime(0.0001, t0 + 3.85); og.gain.exponentialRampToValueAtTime(0.2, t0 + 3.98); og.gain.exponentialRampToValueAtTime(0.0001, t0 + 5.7);
+      o.connect(og); og.connect(master); o.start(t0 + 3.85); o.stop(t0 + 5.8);
+    });
+  }
 
   /* Programme tout le jingle dans `ac` (contexte réel OU hors-ligne), branché sur `out`, à partir de t0. */
   function build(ac, out, t0) {
+    if (VARIANT === 'b') return buildB(ac, out, t0);
     const master = ac.createGain();
     master.gain.value = 0.6;
     master.connect(out);
@@ -104,7 +173,7 @@
     const OAC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
     if (!OAC) return;
     try {
-      const rate = 44100, secs = 8.6;
+      const rate = 44100, secs = AUDIO_SECS;
       const oc = new OAC(1, Math.ceil(rate * secs), rate);
       build(oc, limiterFor(oc), 0);
       const done = (rendered) => {

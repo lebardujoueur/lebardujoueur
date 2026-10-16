@@ -16,6 +16,12 @@
         document.documentElement.setAttribute('data-age-ok', '1');
       }
     } catch (e) {}
+    /* Variante d'intro : « a » (l'écriture se dévoile, le dé se loge — ~8,5 s) ou « b » (lancer de dé — ~6 s).
+       Pour essayer l'autre : ajouter ?intro=b ou ?intro=a à l'adresse. Pour l'adopter : changer 'a' ci-dessous. */
+    try {
+      var m = location.search.match(/[?&]intro=([ab])/i);
+      document.documentElement.setAttribute('data-intro-variant', (m ? m[1] : 'a').toLowerCase());
+    } catch (e) {}
     /* Intro de ~8 s : une fois par session (ajouter ?intro à l'adresse pour la revoir),
        jamais si l'utilisateur a désactivé les animations. */
     try {
@@ -53,6 +59,7 @@
       <!-- le vrai logo en deux calques de même taille : l'écriture, puis le dé qui vient s'y loger -->
       <div class="intro-logo">
         <img class="logo-text" src="images/logo-text.png" alt="">
+        <img class="logo-die-full" src="images/logo-die-full.png" alt="">
         <img class="logo-die" src="images/logo-die.png" alt="">
         <span class="intro-ring"></span>
       </div>

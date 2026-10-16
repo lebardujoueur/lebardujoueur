@@ -142,6 +142,58 @@ html[data-intro-done="1"] .intro { display: none; }
 .menu a:hover { color: var(--ink); }
 .top-cta { padding: 9px 18px; }
 
+/* ═══ Intro, variante b : lancer de dé (~6 s) ═══
+   1) le dé tombe au centre de l'écran, rebondit et roule ; 2) il glisse vers sa place dans le logo ;
+   3) l'écriture se dévoile en cercle autour de lui ; 4) onde verte à l'atterrissage.
+   Le centre du dé dans le logo = 22,6 % / 54,1 % ; pour le ramener au centre de l'écran : translate(27,4 %, -4,1 %). */
+html[data-intro-variant="b"] .intro-load { display: none; }
+html[data-intro-variant="b"] .logo-text { clip-path: circle(0 at 22.6% 54.1%); }
+html[data-intro-variant="b"] .intro.play .logo-text { animation: bReveal 1.5s cubic-bezier(.5, 0, .2, 1) 3.35s forwards; }
+@keyframes bReveal { to { clip-path: circle(125% at 22.6% 54.1%); } }
+/* le dé « complet » (sans l'encoche laissée par le J du logo) tombe et glisse ; à 3,9 s le dé d'origine reprend sa place */
+.logo-die-full { display: none; opacity: 0; transform-origin: 22.6% 54.1%; }
+html[data-intro-variant="b"] .logo-die-full { display: block; }
+html[data-intro-variant="b"] .intro.play .logo-die-full {
+  animation: bDrop 2s linear .35s forwards, bSlide .9s cubic-bezier(.5, 0, .2, 1) 3s forwards, bHide .01s linear 3.9s forwards;
+}
+html[data-intro-variant="b"] .intro.play .logo-die { animation: bShowDie .01s linear 3.9s forwards; }
+@keyframes bHide { to { opacity: 0; } }
+@keyframes bShowDie { to { opacity: 1; } }
+@keyframes bDrop {
+  0%   { opacity: 1; transform: translate(27.4%, -170%) rotate(-420deg) scale(1.7); animation-timing-function: cubic-bezier(.5, 0, .9, .6); }
+  30%  { opacity: 1; transform: translate(27.4%, -4.1%) rotate(25deg) scale(1.82, 1.5); animation-timing-function: cubic-bezier(.1, .5, .3, 1); }
+  52%  { opacity: 1; transform: translate(27.4%, -59%) rotate(140deg) scale(1.7); animation-timing-function: cubic-bezier(.5, 0, .9, .6); }
+  68%  { opacity: 1; transform: translate(27.4%, -4.1%) rotate(215deg) scale(1.78, 1.55); animation-timing-function: cubic-bezier(.1, .5, .3, 1); }
+  80%  { opacity: 1; transform: translate(27.4%, -22%) rotate(300deg) scale(1.7); animation-timing-function: cubic-bezier(.5, 0, .9, .6); }
+  88%  { opacity: 1; transform: translate(27.4%, -4.1%) rotate(340deg) scale(1.74, 1.6); animation-timing-function: cubic-bezier(.1, .5, .3, 1); }
+  94%  { opacity: 1; transform: translate(27.4%, -9%) rotate(352deg) scale(1.7); animation-timing-function: cubic-bezier(.5, 0, .9, .6); }
+  100% { opacity: 1; transform: translate(27.4%, -4.1%) rotate(360deg) scale(1.7); }
+}
+@keyframes bSlide {
+  from { opacity: 1; transform: translate(27.4%, -4.1%) rotate(360deg) scale(1.7); }
+  to   { opacity: 1; transform: translate(0, 0) rotate(720deg) scale(1); }
+}
+/* ombre sous le dé pendant la chute */
+html[data-intro-variant="b"] .intro-logo::after {
+  content: ''; position: absolute; left: 50%; top: 66%; width: 46%; height: 7%; margin-left: -23%;
+  border-radius: 50%; background: rgba(26, 25, 21, .28); filter: blur(10px); opacity: 0; pointer-events: none;
+}
+html[data-intro-variant="b"] .intro.play .intro-logo::after { animation: bShadow 2s linear .35s forwards, bShadowOut .6s ease-in 3s forwards; }
+@keyframes bShadow {
+  0%   { opacity: 0; transform: scale(.3); }
+  30%  { opacity: .34; transform: scale(1); }
+  52%  { opacity: .14; transform: scale(.65); }
+  68%  { opacity: .32; transform: scale(1); }
+  80%  { opacity: .22; transform: scale(.82); }
+  88%  { opacity: .3; transform: scale(1); }
+  94%  { opacity: .26; transform: scale(.94); }
+  100% { opacity: .3; transform: scale(1); }
+}
+@keyframes bShadowOut { from { opacity: .3; transform: scale(1); } to { opacity: 0; transform: scale(1.5); } }
+/* onde verte + battement du logo : au moment où le dé se loge (3,9 s) */
+html[data-intro-variant="b"] .intro.play .intro-ring { animation: introRing 1s ease-out 3.9s forwards; }
+html[data-intro-variant="b"] .intro.play .intro-logo { animation: introPulse .6s ease-out 3.9s; }
+
 /* ═══ Accueil ═══ */
 .hero {
   max-width: var(--max); margin: 0 auto;

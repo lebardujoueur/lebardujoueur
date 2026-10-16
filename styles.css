@@ -188,6 +188,16 @@ html[data-intro-done="1"] .intro { display: none; }
 .stat-big { font-size: clamp(24px, 3vw, 40px); letter-spacing: -0.02em; line-height: 1.1; }
 .stat-label { color: var(--ash); font-size: 14px; margin-top: 6px; }
 
+/* titre de la section formules : plus grand, coloré, avec une vague et un surlignage */
+.fancy-title { font-size: clamp(36px, 6.2vw, 72px); font-weight: 500; letter-spacing: -0.035em; line-height: 1.08; margin-top: 0; text-wrap: balance; }
+.fancy-title .num { color: var(--orange); }
+.fancy-title .wave {
+  padding-bottom: .14em;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='9' viewBox='0 0 26 9'%3E%3Cpath d='M0 4.5 Q6.5 0 13 4.5 T26 4.5' fill='none' stroke='%23ec7a1c' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E") repeat-x left bottom / .9em .3em;
+}
+.fancy-title .hl { position: relative; display: inline-block; z-index: 0; white-space: nowrap; }
+.fancy-title .hl::before { content: ''; position: absolute; left: -.1em; right: -.1em; bottom: .02em; height: .46em; background: var(--lime); border-radius: 6px; transform: rotate(-1.4deg); z-index: -1; }
+
 /* ═══ Formules (3 encarts) ═══ */
 .formules { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: stretch; }
 .formule { position: relative; background: var(--white); border: 1px solid var(--ink-faint); border-top: 6px solid var(--sun); border-radius: 10px; padding: 28px 24px 26px; text-align: left; box-shadow: 0 6px 18px rgba(var(--ink-rgb), .06); }
@@ -285,6 +295,37 @@ html[data-intro-done="1"] .intro { display: none; }
 .carte-name { font-size: 17px; }
 .carte-desc { color: var(--ash); font-size: 14px; margin-top: 2px; }
 .carte-price { white-space: nowrap; font-size: 17px; text-align: right; }
+/* tableau des allergènes */
+.allergens { margin-top: 44px; }
+.al-box { background: var(--white); border: 1px solid var(--ink-faint); border-top: 6px solid var(--orange); border-radius: 10px; }
+.al-box summary { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; cursor: pointer; list-style: none; padding: 18px 22px; font-size: 20px; }
+.al-box summary::-webkit-details-marker { display: none; }
+.al-box summary .mono { color: var(--orange-deep); font-size: 11px; margin-left: auto; }
+.al-box[open] .chev::after { transform: translate(-50%, -50%) rotate(90deg); opacity: 0; }
+.al-note { padding: 0 22px; color: var(--ash); font-size: 14px; line-height: 1.5; }
+.al-legend { display: flex; flex-wrap: wrap; gap: 8px 22px; padding: 14px 22px 4px; font-size: 14px; }
+.al-legend span { display: inline-flex; align-items: center; gap: 8px; }
+.al-scroll { overflow-x: auto; padding: 8px 12px 12px; }
+.al-table { border-collapse: collapse; width: 100%; font-size: 14px; }
+.al-table th, .al-table td { border-bottom: 1px solid var(--ink-faint); padding: 7px 4px; text-align: center; }
+.al-table thead th { vertical-align: bottom; height: 118px; font-weight: 500; font-size: 12px; }
+.al-table thead th:first-child { text-align: left; vertical-align: bottom; padding-left: 10px; font-size: 13px; }
+.al-table thead th span { display: inline-block; writing-mode: vertical-rl; transform: rotate(180deg); white-space: nowrap; }
+.al-table tbody th { text-align: left; font-weight: 400; padding-left: 10px; min-width: 200px; position: sticky; left: 0; background: var(--white); }
+.al-table tr.al-cat th { position: static; background: rgba(var(--ink-rgb), .05); color: var(--orange-deep); font-family: var(--mono); font-size: 12px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; padding: 8px 10px; }
+.al-none { color: var(--ash); font-size: 13px; text-align: left !important; padding-left: 14px !important; }
+.al-dot { display: inline-block; width: 14px; height: 14px; border-radius: 50%; vertical-align: middle; }
+.al-dot.yes { background: var(--orange); }
+.al-dot.maybe { border: 2px solid var(--orange); background: transparent; }
+.al-print { margin: 6px 22px 20px; border: 2px solid var(--ink); background: var(--white); cursor: pointer; font-family: inherit; font-size: 15px; padding: 10px 20px; border-radius: 999px; }
+@media print {
+  @page { size: A4 landscape; margin: 10mm; }
+  html.print-al body * { visibility: hidden; }
+  html.print-al #allergens, html.print-al #allergens * { visibility: visible; }
+  html.print-al #allergens { position: absolute; left: 0; top: 0; width: 100%; }
+  html.print-al .al-print, html.print-al .al-box .chev { display: none; }
+  html.print-al .al-table tbody th { position: static; }
+}
 .carte-warning { margin-top: 40px; text-align: center; color: var(--ash); font-size: 10px; }
 #tabs .tabs-head { margin-bottom: 28px; }
 #tabs .tabs-head .kicker { font-size: clamp(26px, 4vw, 40px); font-weight: 500; letter-spacing: .08em; }

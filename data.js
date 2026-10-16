@@ -163,6 +163,58 @@ Crêpe garnie | Nutella, confiture de fraises ou sucre | 3,50 €
     maxPersonnes: 8
   },
 
+  /* TABLEAU DES ALLERGÈNES (14 allergènes réglementaires) — sous la carte.
+     ⚠ BROUILLON À VALIDER avec les étiquettes / fiches de vos fournisseurs et vos recettes.
+     Il reste CACHÉ sur le site tant que `valide` vaut false. (Aperçu local : ajouter ?allergenes à l'adresse.)
+     Une catégorie = « # Titre ». Puis une ligne par article :
+        Nom | allergènes PRÉSENTS | allergènes POSSIBLES (traces, selon la marque ou la saveur)
+     Mettre « - » en 2e champ si l'article ne contient aucun des 14 allergènes.
+     Mots à utiliser : gluten, crustaces, oeufs, poisson, arachides, soja, lait, coque, celeri, moutarde, sesame, sulfites, lupin, mollusques */
+  allergenes: {
+    valide: false,
+    note: `Information indicative, établie d'après la composition des produits. Elle peut évoluer avec nos fournisseurs. En cas d'allergie ou d'intolérance, demandez conseil au comptoir : des traces sont possibles (cuisine et matériel partagés).`,
+    text: `
+# Bières pression
+Bière bise blonde | gluten
+Bière bise ardente | gluten
+Bière la cuvée des trolls | gluten
+
+# Softs
+Coca-Cola | -
+Coca-Cola Zéro | -
+Orangina | -
+Oasis | -
+Fuze Tea | -
+Perrier | -
+Limonade blanche | -
+Diabolo | -
+Cristaline | -
+
+# Vins
+Cabernet d'Anjou AOP, Pierre Chanau | sulfites
+Rosé pamplemousse, Le Navoy | sulfites
+
+# Snacking
+Croque-monsieur | gluten, lait | sesame, moutarde
+Hot-dog | gluten, moutarde | lait, celeri, sulfites, soja, sesame
+Planche apéro duo | gluten, lait, sulfites | moutarde, celeri, oeufs, soja
+Saucisson fuet d'Espagne | | lait, sulfites
+Chips Lays | | gluten, lait, soja, celeri
+
+# Boissons chaudes
+Café expresso | -
+Café double | -
+Thé | -
+Chocolat chaud | lait | soja, gluten, coque
+
+# Desserts
+Gaufre | gluten, oeufs, lait | soja
+Cookie | gluten, oeufs, lait, soja | coque, arachides
+Crêpe nature | gluten, oeufs, lait
+Crêpe garnie | gluten, oeufs, lait, coque, soja
+`
+  },
+
   jeuxNote: `Filtrez par âge ou par catégorie pour trouver le jeu adapté. La liste s'agrandit au fil des arrivages.`,
 
   /* ACTUS — le plus récent en premier. `images` facultatif. */

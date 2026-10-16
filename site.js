@@ -196,6 +196,39 @@
     ${c.items.map((i) => `<div class="carte-item"><div><p class="carte-name">${i.name}</p>${i.desc ? `<p class="carte-desc">${i.desc}</p>` : ''}</div><p class="carte-price">${i.price}</p></div>`).join('')}
   </section>`).join(''));
 
+  // ── Allergènes (caché tant que `valide` n'est pas true ; aperçu local : ?allergenes) ──
+  const AL = S.allergenes || {};
+  const alBox = $('#allergens');
+  if (alBox && (AL.valide || /[?&]allergenes\b/.test(location.search))) {
+    const ALLERGENS = [['gluten', 'Gluten'], ['crustaces', 'Crustacés'], ['oeufs', 'Œufs'], ['poisson', 'Poissons'], ['arachides', 'Arachides'],
+      ['soja', 'Soja'], ['lait', 'Lait'], ['coque', 'Fruits à coque'], ['celeri', 'Céleri'], ['moutarde', 'Moutarde'], ['sesame', 'Sésame'],
+      ['sulfites', 'Sulfites'], ['lupin', 'Lupin'], ['mollusques', 'Mollusques']];
+    const key = (x) => norm(x).replace(/œ/g, 'oe').trim();
+    const toList = (s) => (s || '').split(',').map(key).filter((x) => x && x !== '-');
+    const body = (AL.text || '').split('\n').map((l) => l.trim()).filter(Boolean).map((line) => {
+      if (line.startsWith('#')) return `<tr class="al-cat"><th colspan="${ALLERGENS.length + 1}">${line.replace(/^#+\s*/, '')}</th></tr>`;
+      const [name = '', yes = '', maybe = ''] = line.split('|').map((p) => p.trim());
+      if (yes === '-') return `<tr><th scope="row">${name}</th><td class="al-none" colspan="${ALLERGENS.length}">Aucun des 14 allergènes</td></tr>`;
+      const Y = toList(yes), M = toList(maybe);
+      return `<tr><th scope="row">${name}</th>${ALLERGENS.map(([k]) => Y.includes(k) ? '<td><i class="al-dot yes" role="img" aria-label="contient"></i></td>'
+        : M.includes(k) ? '<td><i class="al-dot maybe" role="img" aria-label="peut contenir"></i></td>' : '<td></td>').join('')}</tr>`;
+    }).join('');
+    alBox.innerHTML = `<details class="al-box">
+      <summary><span>Tableau des allergènes</span><span class="mono">14 ALLERGÈNES RÉGLEMENTAIRES</span><span class="chev" aria-hidden="true"></span></summary>
+      <p class="al-note">${AL.note || ''}</p>
+      <p class="al-legend"><span><i class="al-dot yes"></i> Contient</span><span><i class="al-dot maybe"></i> Peut en contenir (traces, selon la marque ou la saveur)</span></p>
+      <div class="al-scroll"><table class="al-table"><thead><tr><th scope="col">Article</th>${ALLERGENS.map(([, label]) => `<th scope="col"><span>${label}</span></th>`).join('')}</tr></thead><tbody>${body}</tbody></table></div>
+      <button type="button" class="al-print">Imprimer le tableau</button>
+    </details>`;
+    alBox.hidden = false;
+    alBox.querySelector('.al-print').addEventListener('click', () => {
+      alBox.querySelector('details').open = true;
+      document.documentElement.classList.add('print-al');
+      window.print();
+      setTimeout(() => document.documentElement.classList.remove('print-al'), 500);
+    });
+  }
+
   // ── Onglets : Nouveautés · Planning · Jeux · La carte ──
   const tabBtns = [...document.querySelectorAll('.tab-btn')];
   const tabPanels = [...document.querySelectorAll('.tab-panel')];

@@ -159,7 +159,7 @@ Crêpe garnie | Nutella, confiture de fraises ou sucre | 3,50 €
      Plus tard, pour recevoir les réservations dans un tableau (Formspree, Tally…), collez ici l'adresse
      du formulaire dans `endpoint` : le site l'utilisera automatiquement. */
   reservation: {
-    endpoint: ``,
+    endpoint: `https://script.google.com/macros/s/AKfycbxtrt_i-q8ftk-piClw-ug6qj8Q0xgFIjeaq4b6fhseqv04kpr67UeaGts3Mqq_OguRUA/exec`,
     maxPersonnes: 8
   },
 

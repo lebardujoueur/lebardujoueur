@@ -89,6 +89,7 @@
     <button type="button" class="btn btn-primary res-open">Réserver ma place</button>
     <form class="res-form" hidden>
       <label>Date souhaitée<input type="date" name="date" required min="${iso(new Date())}" value="${iso(nextDateOf(day))}"></label>
+      <p class="res-left mono res-wide" aria-live="polite"></p>
       <label>Nom et prénom<input type="text" name="nom" required autocomplete="name"></label>
       <label>Téléphone ou e-mail<input type="text" name="contact" required autocomplete="email"></label>
       <label>Nombre de personnes<input type="number" name="nb" required min="1" max="${Math.min(RES.maxPersonnes || 8, info.places || 99)}" value="1"></label>
@@ -102,7 +103,7 @@
     const info = infoFor(e.label);
     if (!info) return `<p class="plan-ev">${head}</p>`;
     const p = info.provider;
-    return `<details class="plan-ev plan-ev-d" data-day="${attr(d.day)}" data-event="${attr((e.time + ' ' + e.label).trim())}">
+    return `<details class="plan-ev plan-ev-d" data-day="${attr(d.day)}" data-event="${attr((e.time + ' ' + e.label).trim())}" data-match="${attr(info.match)}">
       <summary>${head}<span class="plan-more mono${info.complet ? ' full' : ''}">${info.complet ? 'COMPLET' : info.reservation ? 'INFOS & RÉSERVATION' : 'INFOS'}</span><span class="chev" aria-hidden="true"></span></summary>
       <div class="plan-body">
         ${info.desc ? `<p class="game-desc">${info.desc}</p>` : ''}
@@ -120,9 +121,52 @@
     </div>`;
   }).join(''));
 
+  // Places restantes par date (uniquement si `endpoint` : le tableau Google fait foi)
+  const askLeft = async (match, dateIso) => {
+    try {
+      const r = await fetch(`${RES.endpoint}?action=left&event=${encodeURIComponent(match)}&date=${dateIso}`);
+      const j = await r.json();
+      return j && j.ok ? j : null;
+    } catch (e) { return null; }
+  };
+  const leftLabel = (n) => n <= 0 ? 'COMPLET' : `${n} PLACE${n > 1 ? 'S' : ''} RESTANTE${n > 1 ? 'S' : ''}`;
+  const applyLeftToBadge = (box, j) => {
+    const full = j.left <= 0;
+    const pl = box.querySelector('.plan-places');
+    if (pl) { pl.textContent = leftLabel(j.left); pl.classList.toggle('full', full); }
+    const more = box.querySelector('.plan-more');
+    if (more) { more.textContent = full ? 'COMPLET' : 'INFOS & RÉSERVATION'; more.classList.toggle('full', full); }
+  };
+  const applyLeftToForm = (form, j) => {
+    const line = form.querySelector('.res-left');
+    const nb = form.querySelector('[name="nb"]');
+    const submit = form.querySelector('button[type="submit"]');
+    if (!j) { line.textContent = ''; submit.disabled = false; return; }
+    line.textContent = j.left <= 0 ? 'COMPLET À CETTE DATE — choisissez une autre date.' : leftLabel(j.left) + ' À CETTE DATE';
+    nb.max = Math.min(RES.maxPersonnes || 8, Math.max(j.left, 1));
+    if (+nb.value > +nb.max) nb.value = nb.max;
+    submit.disabled = j.left <= 0;
+  };
+  const checkForm = async (form) => {
+    const box = form.closest('.plan-ev-d');
+    const j = await askLeft(box.dataset.match, form.querySelector('[name="date"]').value);
+    applyLeftToForm(form, j);
+    return j;
+  };
+  if (RES.endpoint) {
+    document.querySelectorAll('.plan-ev-d[data-match]').forEach(async (box) => {
+      if (!box.querySelector('.res-form')) return;
+      const j = await askLeft(box.dataset.match, iso(nextDateOf(box.dataset.day)));
+      if (j) applyLeftToBadge(box, j);
+    });
+  }
+
   // Réservation : bouton → formulaire → envoi (formulaire distant si `endpoint`, sinon e-mail)
   const planList = $('#planningList');
   if (planList) {
+    planList.addEventListener('change', (ev) => {
+      if (RES.endpoint && ev.target.matches('.res-form [name="date"]')) checkForm(ev.target.closest('.res-form'));
+    });
     planList.addEventListener('click', (ev) => {
       const copy = ev.target.closest('.res-copy');
       if (copy) {
@@ -137,6 +181,7 @@
       const form = open.parentElement.querySelector('.res-form');
       form.hidden = !form.hidden;
       open.textContent = form.hidden ? 'Réserver ma place' : 'Fermer le formulaire';
+      if (!form.hidden && RES.endpoint) checkForm(form);
     });
     planList.addEventListener('submit', async (ev) => {
       const form = ev.target.closest('.res-form');
@@ -156,11 +201,20 @@
       if (RES.endpoint) {
         status.textContent = 'Envoi en cours…';
         try {
-          const r = await fetch(RES.endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-            body: JSON.stringify({ animation: box.dataset.event, date: dateFr, nom: f.get('nom'), contact: f.get('contact'), personnes: f.get('nb'), message: f.get('msg') || '' }) });
-          if (!r.ok) throw new Error('http ' + r.status);
-          status.textContent = 'Merci ! Votre demande est bien envoyée. Nous vous confirmons votre place très vite.';
-          form.reset();
+          // text/plain : évite la pré-requête CORS que Google Apps Script ne gère pas
+          const r = await fetch(RES.endpoint, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({ event: box.dataset.match, animation: box.dataset.event, date: f.get('date'), dateFr, nom: f.get('nom'), contact: f.get('contact'), personnes: f.get('nb'), message: f.get('msg') || '' }) });
+          const j = await r.json();
+          if (j.ok) {
+            status.textContent = 'Merci ! Votre demande est enregistrée et vos places sont réservées. L\'équipe la valide, puis vous confirme votre participation.';
+            form.reset();
+            form.querySelector('[name="date"]').value = f.get('date');
+            applyLeftToForm(form, j);
+            askLeft(box.dataset.match, iso(nextDateOf(box.dataset.day))).then((nx) => nx && applyLeftToBadge(box, nx));
+          } else if (j.error === 'full') {
+            status.textContent = j.left > 0 ? `Il ne reste que ${j.left} place${j.left > 1 ? 's' : ''} à cette date : réduisez le nombre de personnes.` : 'Cette date est complète : choisissez une autre date.';
+            applyLeftToForm(form, j);
+          } else throw new Error(j.error || 'erreur');
         } catch (err) { status.textContent = `L'envoi a échoué. Écrivez-nous directement à ${B.email}.`; }
       } else {
         status.textContent = 'Votre application e-mail va s\'ouvrir : envoyez le message pour finaliser. Nous confirmerons votre place par retour.';

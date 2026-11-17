@@ -321,6 +321,8 @@ html[data-intro-variant="b"] .intro.play .intro-logo { animation: introPulse .6s
 .res-fallback textarea { font-size: 14px; }
 .res-copy { justify-self: start; border: 2px solid var(--ink); background: var(--white); cursor: pointer; font-family: inherit; font-size: 15px; padding: 9px 18px; border-radius: 999px; }
 .res-status { font-size: 14px; color: var(--lime-deep); font-weight: 500; }
+.res-left { color: var(--orange-deep); font-weight: 500; margin: -4px 0 0; min-height: 1em; }
+.res-form button[type="submit"]:disabled { opacity: .4; cursor: not-allowed; }
 .plan-time { color: var(--orange-deep); font-weight: 500; font-size: 14px; }
 .plan-title { font-size: 20px; }
 .plan-row.off .plan-title { color: var(--ash); }
